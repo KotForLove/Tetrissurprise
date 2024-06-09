@@ -1,6 +1,7 @@
 package Tetris;
 
 import PPO.PPOMainMenu;
+import PPO.TransitDialog;
 import Tetris.Tetris;
 
 import javax.swing.*;
@@ -118,9 +119,7 @@ public class Board extends JPanel implements ActionListener {
         if(PIECES_COUNT == 5) {
             parent.setVisible(false);
             parent.dispose();
-            JOptionPane.showOptionDialog(this, "Let's go the next game!",
-                    "NEXT GAME", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                    null, new String[] { "OK" }, "OK");
+            new TransitDialog(parent);
             PPOMainMenu mainMenu = new PPOMainMenu();
         }
 
