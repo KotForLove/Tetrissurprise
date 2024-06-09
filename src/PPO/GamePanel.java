@@ -1,3 +1,5 @@
+package PPO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -148,15 +150,14 @@ public class GamePanel extends JPanel {
 
         // Малювання фону
         if (background != null) {
-            Image scaledBackground = background.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
-            g.drawImage(scaledBackground, 0, 0, null);
+            g.drawImage(background.getImage(), 0, 0, getWidth(), getHeight(), null);
         }
 
         // Малювання пушки
         gunX = getWidth() / 2 - 15;
         gunY = getHeight() - 100;
         if (gunImage != null) {
-            g.drawImage(gunImage.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH), gunX, gunY, null);
+            g.drawImage(gunImage.getImage(), gunX, gunY, 30, 30, null);
         }
 
         // Малювання ракет

@@ -1,3 +1,5 @@
+package PPO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,7 +15,7 @@ public class MainMenu extends JFrame implements ActionListener {
     public MainMenu() {
         // Налаштування основного вікна
         setTitle("PPO Defense Game");
-        setSize(800, 600);
+        setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -27,8 +29,8 @@ public class MainMenu extends JFrame implements ActionListener {
                     System.err.println("Фонова картинка не знайдена: " + bgFile.getAbsolutePath());
                 } else {
                     ImageIcon background = new ImageIcon(bgFile.getAbsolutePath());
-                    Image scaledImage = background.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_SMOOTH);
-                    g.drawImage(scaledImage, 0, 0, null);
+                    Image image = background.getImage();
+                    g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
                 }
             }
         };
@@ -99,7 +101,7 @@ public class MainMenu extends JFrame implements ActionListener {
             JFrame gameFrame = new JFrame("PPO Defense Game");
             GamePanel gamePanel = new GamePanel();
             gameFrame.add(gamePanel);
-            gameFrame.setSize(800, 600);
+            gameFrame.setSize(800, 800);
             gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             gameFrame.setLocationRelativeTo(null);
             gameFrame.setVisible(true);
@@ -115,6 +117,6 @@ public class MainMenu extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainMenu());
+        MainMenu mainMenu = new MainMenu();
     }
 }

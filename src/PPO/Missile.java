@@ -1,3 +1,5 @@
+package PPO;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,7 +16,7 @@ public class Missile {
         this.targetX = targetX;
         this.targetY = targetY;
         this.visible = true;
-        this.image = missileImage.getImage().getScaledInstance(10, 2, Image.SCALE_SMOOTH);
+        this.image = missileImage.getImage();
 
         int deltaX = targetX - x;
         int deltaY = targetY - y;
@@ -34,7 +36,7 @@ public class Missile {
 
     public void draw(Graphics g) {
         if (visible) {
-            g.drawImage(image, x, y, null);
+            g.drawImage(image, x, y, 10, 2, null);
         }
     }
 

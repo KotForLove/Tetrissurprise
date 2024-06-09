@@ -1,3 +1,5 @@
+package PPO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,7 +18,7 @@ public class SettingsDialog extends JDialog {
 
         // Налаштування швидкості ракет
         JPanel speedPanel = new JPanel();
-        speedPanel.add(new JLabel("Missile Speed:"));
+        speedPanel.add(new JLabel("PPO.Missile Speed:"));
         speedSlider = new JSlider(1, 10, GamePanel.getMissileSpeed());
         speedPanel.add(speedSlider);
         add(speedPanel);
