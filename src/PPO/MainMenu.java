@@ -9,7 +9,6 @@ import java.io.File;
 public class MainMenu extends JFrame implements ActionListener {
     private JButton startButton;
     private JButton settingsButton;
-    private JButton authorsButton;
 
     public MainMenu() {
         // Налаштування основного вікна
@@ -36,27 +35,22 @@ public class MainMenu extends JFrame implements ActionListener {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Створення кнопок
-        startButton = createButton("Start", "src/images/start.png");
-        settingsButton = createButton("Settings", "src/images/settings.png");
-        authorsButton = createButton("Authors", "src/images/authors.png");
+        startButton = createButton("src/images/start.png", 250, 250);
+        settingsButton = createButton("src/images/settings.png", 120, 120);
 
         // Додавання слухачів до кнопок
         startButton.addActionListener(this);
         settingsButton.addActionListener(this);
-        authorsButton.addActionListener(this);
 
         // Додавання кнопок до панелі
-        panel.add(Box.createRigidArea(new Dimension(0, 100)));
+        panel.add(Box.createRigidArea(new Dimension(0, 240)));
         panel.add(startButton);
         panel.add(Box.createRigidArea(new Dimension(0, 20)));
         panel.add(settingsButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 20)));
-        panel.add(authorsButton);
 
         // Вирівнювання кнопок по центру
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        authorsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Додавання панелі до вікна
         add(panel);
@@ -65,18 +59,17 @@ public class MainMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private JButton createButton(String text, String imagePath) {
+    private JButton createButton(String imagePath, int width, int height) {
         File imgFile = new File(imagePath);
         if (!imgFile.exists()) {
             System.err.println("Зображення для кнопки не знайдено: " + imgFile.getAbsolutePath());
         }
         ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
         JButton button = new JButton(new ImageIcon(icon.getImage().getScaledInstance(
-                100, 50, Image.SCALE_SMOOTH)));
+                width, height, Image.SCALE_SMOOTH)));
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.setText(text);
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.CENTER);
         button.setForeground(Color.WHITE); // колір тексту
@@ -99,9 +92,6 @@ public class MainMenu extends JFrame implements ActionListener {
             // Відкрити налаштування
             SettingsDialog settingsDialog = new SettingsDialog(this);
             settingsDialog.setVisible(true);
-        } else if (e.getSource() == authorsButton) {
-            // Перейти до авторів
-            System.out.println("Authors");
         }
     }
 

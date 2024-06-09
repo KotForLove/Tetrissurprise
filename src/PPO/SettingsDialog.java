@@ -11,14 +11,20 @@ public class SettingsDialog extends JDialog {
         this.mainMenu = mainMenu;
         setTitle("Settings");
         setSize(400, 300);
-        setLayout(new GridLayout(3, 1));
 
-        // Налаштування швидкості ракет
+        add(getSettingsPanel());
+    }
+
+    private JPanel getSettingsPanel() {
+        JPanel settingsPanel = new JPanel();
+        settingsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        settingsPanel.setLayout(new GridLayout(3, 1));
+
         JPanel speedPanel = new JPanel();
         speedPanel.add(new JLabel("Missile Speed:"));
         speedSlider = new JSlider(1, 10, GamePanel.getMissileSpeed());
         speedPanel.add(speedSlider);
-        add(speedPanel);
+        settingsPanel.add(speedPanel);
 
         // Кнопка збереження
         JButton saveButton = new JButton("Save");
@@ -26,6 +32,8 @@ public class SettingsDialog extends JDialog {
             GamePanel.setMissileSpeed(speedSlider.getValue());
             dispose();
         });
-        add(saveButton);
+        settingsPanel.add(saveButton);
+
+        return settingsPanel;
     }
 }
