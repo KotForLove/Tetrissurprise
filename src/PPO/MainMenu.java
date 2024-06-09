@@ -10,7 +10,6 @@ public class MainMenu extends JFrame implements ActionListener {
     private JButton startButton;
     private JButton settingsButton;
     private JButton authorsButton;
-    private float buttonScale = 1.0f; // Масштаб кнопок
 
     public MainMenu() {
         // Налаштування основного вікна
@@ -73,7 +72,7 @@ public class MainMenu extends JFrame implements ActionListener {
         }
         ImageIcon icon = new ImageIcon(imgFile.getAbsolutePath());
         JButton button = new JButton(new ImageIcon(icon.getImage().getScaledInstance(
-                (int) (100 * buttonScale), (int) (50 * buttonScale), Image.SCALE_SMOOTH)));
+                100, 50, Image.SCALE_SMOOTH)));
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
@@ -82,16 +81,6 @@ public class MainMenu extends JFrame implements ActionListener {
         button.setVerticalTextPosition(SwingConstants.CENTER);
         button.setForeground(Color.WHITE); // колір тексту
         return button;
-    }
-
-    public void setButtonScale(float scale) {
-        this.buttonScale = scale;
-        startButton.setIcon(new ImageIcon(new ImageIcon("src/images/start.png").getImage().getScaledInstance(
-                (int) (100 * buttonScale), (int) (50 * buttonScale), Image.SCALE_SMOOTH)));
-        settingsButton.setIcon(new ImageIcon(new ImageIcon("src/images/settings.png").getImage().getScaledInstance(
-                (int) (100 * buttonScale), (int) (50 * buttonScale), Image.SCALE_SMOOTH)));
-        authorsButton.setIcon(new ImageIcon(new ImageIcon("src/images/authors.png").getImage().getScaledInstance(
-                (int) (100 * buttonScale), (int) (50 * buttonScale), Image.SCALE_SMOOTH)));
     }
 
     @Override
