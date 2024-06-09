@@ -23,7 +23,7 @@ public class GamePanel extends JPanel {
     private int score;
     private int lives;
     private SoundPlayer shootSound;
-    private static int missileSpeed = 5;
+    private static int missileSpeed = 2;
     private ImageIcon missileImage;
     private ImageIcon enemyMissileImage;
     private ImageIcon gunImage;
@@ -45,8 +45,8 @@ public class GamePanel extends JPanel {
         enemyMissileImage = loadImage("src/images/enemy.png");
         gunImage = loadImage("src/images/gun.png");
         background = loadImage("src/images/warbackg.png");
-        leftPanelImage = loadImage("src/images/leftpanel.png");
-        rightPanelImage = loadImage("src/images/rightpanel.png");
+        leftPanelImage = loadImage("src/images/leftpanel.jpg");
+        rightPanelImage = loadImage("src/images/rightpanel.jpg");
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -126,7 +126,7 @@ public class GamePanel extends JPanel {
 
         repaint();
 
-        if (random.nextInt(100) < 2) {
+        if (random.nextInt(200) < 2) {
             spawnEnemyMissile();
         }
     }
@@ -205,7 +205,7 @@ public class GamePanel extends JPanel {
             g.drawOval(scannerCenterX, scannerCenterY, 100, 100);
 
             // Малювання зображень панелі керування
-            int panelHeight = 100;
+            int panelHeight = 200;
             g.drawImage(leftPanelImage.getImage(), 0, getHeight() - 100, scannerCenterX, panelHeight, null); // Розтягнуто на всю ліву частину
             g.drawImage(rightPanelImage.getImage(), scannerCenterX + 100, getHeight() - 100, getWidth() - scannerCenterX - 100, panelHeight, null); // Розтягнуто на всю праву частину
         }

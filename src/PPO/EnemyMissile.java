@@ -36,7 +36,7 @@ public class EnemyMissile {
 
     public void draw(Graphics g) {
         if (visible) {
-            g.drawImage(image, x, y, 30, 10, null);
+            g.drawImage(image, x, y, 40, 20, null);
         }
     }
 

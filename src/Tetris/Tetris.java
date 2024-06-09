@@ -27,11 +27,8 @@ public class Tetris extends JFrame {
         menuPanel.add(imageLabel, BorderLayout.CENTER);
 
         add(menuPanel, BorderLayout.CENTER);
-    }
 
-    public static void main(String[] args) {
-        Tetris game = new Tetris();
-        game.setVisible(true);
+        setVisible(true);
     }
 
     public void startGame() {
@@ -55,5 +52,9 @@ public class Tetris extends JFrame {
     public void updateScore(int points) {
         score += points;
         scoreLabel.setText("Score: " + score);
+    }
+
+    public static void main(String[] args) {
+        Tetris game = new Tetris();
     }
 }

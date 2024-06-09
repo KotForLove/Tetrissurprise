@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class MainMenu extends JFrame implements ActionListener {
+public class PPOMainMenu extends JFrame implements ActionListener {
     private JButton startButton;
     private JButton settingsButton;
 
-    public MainMenu() {
+    public PPOMainMenu() {
         // Налаштування основного вікна
         setTitle("PPO Defense Game");
         setSize(800, 800);
@@ -93,9 +93,5 @@ public class MainMenu extends JFrame implements ActionListener {
             SettingsDialog settingsDialog = new SettingsDialog(this);
             settingsDialog.setVisible(true);
         }
-    }
-
-    public static void main(String[] args) {
-        MainMenu mainMenu = new MainMenu();
     }
 }

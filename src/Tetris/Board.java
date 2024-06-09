@@ -1,8 +1,9 @@
 package Tetris;
 
+import PPO.PPOMainMenu;
 import Tetris.Tetris;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
     private final int BOARD_WIDTH = 10;
@@ -25,12 +25,13 @@ public class Board extends JPanel implements ActionListener {
     private Piece curPiece;
     private Piece.Tetrominoes[] board;
     private Tetris parent;
+    private int PIECES_COUNT = 0;
 
     public Board(Tetris parent) {
         this.parent = parent;
         setFocusable(true);
         curPiece = new Piece();
-        timer = new Timer(400, this);
+        timer = new Timer(100, this);
         board = new Piece.Tetrominoes[BOARD_WIDTH * BOARD_HEIGHT];
         addKeyListener(new TAdapter());
         clearBoard();
@@ -110,6 +111,17 @@ public class Board extends JPanel implements ActionListener {
             int x = curX + curPiece.x(i);
             int y = curY - curPiece.y(i);
             board[(y * BOARD_WIDTH) + x] = curPiece.getShape();
+        }
+
+        PIECES_COUNT++;
+
+        if(PIECES_COUNT == 5) {
+            parent.setVisible(false);
+            parent.dispose();
+            JOptionPane.showOptionDialog(this, "Let's go the next game!",
+                    "NEXT GAME", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                    null, new String[] { "OK" }, "OK");
+            PPOMainMenu mainMenu = new PPOMainMenu();
         }
 
         removeFullLines();

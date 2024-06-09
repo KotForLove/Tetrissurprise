@@ -25,7 +25,7 @@ public class Missile {
         int deltaX = targetX - x;
         int deltaY = targetY - y;
         double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        double steps = distance / GamePanel.getMissileSpeed();
+        double steps = distance / (GamePanel.getMissileSpeed() * 2);
         this.dx = (int) (deltaX / steps);
         this.dy = (int) (deltaY / steps);
     }
@@ -40,7 +40,7 @@ public class Missile {
 
     public void draw(Graphics g) {
         if (visible && image != null) {
-            g.drawImage(image, x, y, 30, 10, null);
+            g.drawImage(image, x, y, 40, 20, null);
         }
     }
 
