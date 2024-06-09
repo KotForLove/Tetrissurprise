@@ -14,6 +14,8 @@ public class TransitDialog extends JDialog {
 
         new SoundPlayer("src/sounds/soldier_shout.wav").play();
 
+        setSize(400, 400);
+
         setVisible(true);
         pack();
         setLocationRelativeTo(owner);
