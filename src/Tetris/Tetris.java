@@ -22,7 +22,7 @@ public class Tetris extends JFrame {
         menuPanel.add(startButton, BorderLayout.SOUTH);
 
         // Load and add image to menu
-        ImageIcon imageIcon = new ImageIcon("/Users/mark.kotkovskyi/Downloads/cat.png");
+        ImageIcon imageIcon = new ImageIcon("src/images/tetris.png");
         JLabel imageLabel = new JLabel(imageIcon);
         menuPanel.add(imageLabel, BorderLayout.CENTER);
 
