@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Random;
 
 public class GamePanel extends JPanel {
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
+
     private List<Missile> missiles;
     private List<EnemyMissile> enemyMissiles;
     private Timer timer;
@@ -25,6 +28,8 @@ public class GamePanel extends JPanel {
     private ImageIcon enemyMissileImage;
     private ImageIcon gunImage;
     private ImageIcon background;
+    private ImageIcon leftPanelImage;
+    private ImageIcon rightPanelImage;
 
     public GamePanel() {
         missiles = new ArrayList<>();
@@ -40,6 +45,8 @@ public class GamePanel extends JPanel {
         enemyMissileImage = loadImage("src/images/enemy.png");
         gunImage = loadImage("src/images/gun.png");
         background = loadImage("src/images/warbackg.png");
+        leftPanelImage = loadImage("src/images/leftpanel.png");
+        rightPanelImage = loadImage("src/images/rightpanel.png");
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -63,67 +70,50 @@ public class GamePanel extends JPanel {
         return new ImageIcon(file.getAbsolutePath());
     }
 
-    public static int getMissileSpeed() {
-        return missileSpeed;
-    }
-
-    public static void setMissileSpeed(int speed) {
-        missileSpeed = speed;
-    }
-
     private void shootMissile(int targetX, int targetY) {
-        int startX = gunX + 15;
-        int startY = gunY;
-        missiles.add(new Missile(startX, startY, targetX, targetY, missileImage));
-        if (shootSound != null) {
-            shootSound.play();  // Відтворення звуку пострілу
-        } else {
-            System.err.println("Звуковий файл не завантажено.");
-        }
+        int missileX = gunX + 50; // Зміщено для більших розмірів пушки
+        int missileY = gunY;
+        missiles.add(new Missile(missileX, missileY, targetX, targetY, missileImage));
+        shootSound.play();
     }
 
     private void spawnEnemyMissile() {
-        int startX;
-        int startY = 0;
-
-        if (nextMissileFromLeft) {
-            startX = 0;
-        } else {
-            startX = getWidth();
-        }
-        nextMissileFromLeft = !nextMissileFromLeft;
-
-        enemyMissiles.add(new EnemyMissile(startX, startY, gunX + 15, gunY, enemyMissileImage));
+        int startX = random.nextInt(getWidth());
+        int targetX = getWidth() / 2;
+        int targetY = getHeight();
+        enemyMissiles.add(new EnemyMissile(startX, 0, targetX, targetY, enemyMissileImage));
     }
 
     private void updateGame() {
-        // Оновлення положення ракет
+        for (Missile missile : missiles) {
+            missile.update();
+        }
+
+        for (EnemyMissile enemyMissile : enemyMissiles) {
+            enemyMissile.update();
+        }
+
         Iterator<Missile> missileIterator = missiles.iterator();
         while (missileIterator.hasNext()) {
             Missile missile = missileIterator.next();
-            missile.update();
-            if (missile.isOffScreen()) {
+            if (!missile.isVisible()) {
                 missileIterator.remove();
             }
         }
 
-        // Оновлення положення ворожих ракет
-        Iterator<EnemyMissile> enemyIterator = enemyMissiles.iterator();
-        while (enemyIterator.hasNext()) {
-            EnemyMissile enemyMissile = enemyIterator.next();
-            enemyMissile.update();
-            if (enemyMissile.isOffScreen()) {
-                enemyIterator.remove();
-                lives--;  // Зменшення життів при пропуску ворожої ракети
+        Iterator<EnemyMissile> enemyMissileIterator = enemyMissiles.iterator();
+        while (enemyMissileIterator.hasNext()) {
+            EnemyMissile enemyMissile = enemyMissileIterator.next();
+            if (!enemyMissile.isVisible()) {
+                enemyMissileIterator.remove();
+                // Віднімання життя при досягненні цілі
+                lives--;
                 if (lives <= 0) {
-                    timer.stop();
-                    JOptionPane.showMessageDialog(this, "Game Over! Your score: " + score);
-                    System.exit(0);
+                    gameOver();
                 }
             }
         }
 
-        // Перевірка на зіткнення ракет
         for (Missile missile : missiles) {
             for (EnemyMissile enemyMissile : enemyMissiles) {
                 if (missile.getBounds().intersects(enemyMissile.getBounds())) {
@@ -134,14 +124,45 @@ public class GamePanel extends JPanel {
             }
         }
 
-        missiles.removeIf(missile -> !missile.isVisible());
-        enemyMissiles.removeIf(enemyMissile -> !enemyMissile.isVisible());
-
         repaint();
 
         if (random.nextInt(100) < 2) {
             spawnEnemyMissile();
         }
+    }
+
+    private void gameOver() {
+        timer.stop();
+        int option = JOptionPane.showOptionDialog(this, "Game Over. Your score: " + score,
+                "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, new String[]{"Restart", "Main Menu"}, "Restart");
+
+        if (option == 0) {
+            resetGame();
+        } else {
+            // Повернутись на головне меню (імплементуйте ваш метод для цього)
+            goToMainMenu();
+        }
+    }
+
+    private void resetGame() {
+        missiles.clear();
+        enemyMissiles.clear();
+        score = 0;
+        lives = 3;
+        timer.start();
+    }
+
+    private void goToMainMenu() {
+        // Імплементуйте ваш метод для повернення на головне меню
+    }
+
+    public static int getMissileSpeed() {
+        return missileSpeed;
+    }
+
+    public static void setMissileSpeed(int speed) {
+        missileSpeed = speed;
     }
 
     @Override
@@ -154,10 +175,10 @@ public class GamePanel extends JPanel {
         }
 
         // Малювання пушки
-        gunX = getWidth() / 2 - 15;
-        gunY = getHeight() - 100;
+        gunX = getWidth() / 2 - 50; // Збільшено для більших розмірів пушки
+        gunY = getHeight() - 200; // Піднято вище
         if (gunImage != null) {
-            g.drawImage(gunImage.getImage(), gunX, gunY, 30, 30, null);
+            g.drawImage(gunImage.getImage(), gunX, gunY, 100, 100, null); // Збільшено для більших розмірів пушки
         }
 
         // Малювання ракет
@@ -172,21 +193,33 @@ public class GamePanel extends JPanel {
 
         // Малювання панелі керування
         g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, getHeight() - 50, getWidth(), 50);
+        g.fillRect(0, getHeight() - 100, getWidth(), 100);
 
         // Малювання сканера
-        g.setColor(Color.GREEN);
-        g.drawOval(getWidth() / 2 - 50, getHeight() - 100, 100, 100);
+        if (leftPanelImage != null && rightPanelImage != null) {
+            int scannerCenterX = getWidth() / 2 - 50;
+            int scannerCenterY = getHeight() - 100; // Зміщено нижче
+            g.setColor(Color.BLACK);
+            g.fillOval(scannerCenterX, scannerCenterY, 100, 100); // Тло сканера
+            g.setColor(Color.GREEN);
+            g.drawOval(scannerCenterX, scannerCenterY, 100, 100);
+
+            // Малювання зображень панелі керування
+            int panelHeight = 100;
+            g.drawImage(leftPanelImage.getImage(), 0, getHeight() - 100, scannerCenterX, panelHeight, null); // Розтягнуто на всю ліву частину
+            g.drawImage(rightPanelImage.getImage(), scannerCenterX + 100, getHeight() - 100, getWidth() - scannerCenterX - 100, panelHeight, null); // Розтягнуто на всю праву частину
+        }
 
         // Малювання рахунку та життів
         g.setColor(Color.WHITE);
-        g.drawString("Score: " + score, 10, 20);
-        g.drawString("Lives: " + lives, 10, 40);
+        g.drawString("Score: " + score, 10, getHeight() - 80);
+        g.drawString("Lives: " + lives, 10, getHeight() - 60);
 
         // Малювання ворожих ракет на сканері
         for (EnemyMissile enemyMissile : enemyMissiles) {
             int radarX = getWidth() / 2 - 50 + (enemyMissile.getX() * 100 / getWidth());
             int radarY = getHeight() - 100 + (enemyMissile.getY() * 100 / getHeight());
+            g.setColor(Color.RED);
             g.fillOval(radarX, radarY, 5, 5);
         }
     }

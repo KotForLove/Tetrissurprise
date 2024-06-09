@@ -16,7 +16,11 @@ public class Missile {
         this.targetX = targetX;
         this.targetY = targetY;
         this.visible = true;
-        this.image = missileImage.getImage();
+        this.image = missileImage != null ? missileImage.getImage() : null;
+
+        if (this.image == null) {
+            System.err.println("Зображення ракети не знайдено");
+        }
 
         int deltaX = targetX - x;
         int deltaY = targetY - y;
@@ -29,13 +33,13 @@ public class Missile {
     public void update() {
         x += dx;
         y += dy;
-        if (x < 0 || x > 800 || y < 0 || y > 600) {
+        if (isOffScreen()) {
             visible = false;
         }
     }
 
     public void draw(Graphics g) {
-        if (visible) {
+        if (visible && image != null) {
             g.drawImage(image, x, y, 30, 10, null);
         }
     }
@@ -49,10 +53,10 @@ public class Missile {
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(x, y, 10, 2);
+        return new Rectangle(x, y, 30, 10);
     }
 
     public boolean isOffScreen() {
-        return x < 0 || x > 800 || y < 0 || y > 600;
+        return x < 0 || x > GamePanel.WIDTH || y < 0 || y > GamePanel.HEIGHT;
     }
 }
