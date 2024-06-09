@@ -5,17 +5,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GamePanel extends JPanel {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
 
-    private List<Missile> missiles;
-    private List<EnemyMissile> enemyMissiles;
+
+    private java.util.Queue<Missile> missiles;
+    private java.util.Queue<EnemyMissile> enemyMissiles;
     private Timer timer;
     private int gunX, gunY;
     private Random random;
@@ -32,8 +32,8 @@ public class GamePanel extends JPanel {
     private ImageIcon rightPanelImage;
 
     public GamePanel() {
-        missiles = new ArrayList<>();
-        enemyMissiles = new ArrayList<>();
+        missiles = new ConcurrentLinkedQueue<>();
+        enemyMissiles = new ConcurrentLinkedQueue<>();
         random = new Random();
         nextMissileFromLeft = true;
         score = 0;
@@ -80,7 +80,7 @@ public class GamePanel extends JPanel {
     private void spawnEnemyMissile() {
         int startX = random.nextInt(getWidth());
         int targetX = getWidth() / 2;
-        int targetY = getHeight();
+        int targetY = getHeight() - 300;
         enemyMissiles.add(new EnemyMissile(startX, 0, targetX, targetY, enemyMissileImage));
     }
 
@@ -94,6 +94,7 @@ public class GamePanel extends JPanel {
         }
 
         Iterator<Missile> missileIterator = missiles.iterator();
+
         while (missileIterator.hasNext()) {
             Missile missile = missileIterator.next();
             if (!missile.isVisible()) {
@@ -101,7 +102,22 @@ public class GamePanel extends JPanel {
             }
         }
 
-        Iterator<EnemyMissile> enemyMissileIterator = enemyMissiles.iterator();
+        missileIterator = missiles.iterator();
+        Iterator<EnemyMissile> enemyMissileIterator;
+        while (missileIterator.hasNext()) {
+            Missile missile = missileIterator.next();
+            enemyMissileIterator = enemyMissiles.iterator();
+
+            while (enemyMissileIterator.hasNext()) {
+                EnemyMissile enemyMissile = enemyMissileIterator.next();
+                if (missile.getBounds().intersects(enemyMissile.getBounds())) {
+                    enemyMissiles.remove(enemyMissile);
+                    score++;
+                }
+            }
+        }
+
+        enemyMissileIterator = enemyMissiles.iterator();
         while (enemyMissileIterator.hasNext()) {
             EnemyMissile enemyMissile = enemyMissileIterator.next();
             if (!enemyMissile.isVisible()) {
@@ -110,16 +126,6 @@ public class GamePanel extends JPanel {
                 lives--;
                 if (lives <= 0) {
                     gameOver();
-                }
-            }
-        }
-
-        for (Missile missile : missiles) {
-            for (EnemyMissile enemyMissile : enemyMissiles) {
-                if (missile.getBounds().intersects(enemyMissile.getBounds())) {
-                    missile.setVisible(false);
-                    enemyMissile.setVisible(false);
-                    score++;
                 }
             }
         }
@@ -135,7 +141,7 @@ public class GamePanel extends JPanel {
         timer.stop();
         int option = JOptionPane.showOptionDialog(this, "Game Over. Your score: " + score,
                 "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
-                null, new String[]{"Restart", "Main Menu"}, "Restart");
+                null, new String[]{"Restart"}, "Restart");
 
         if (option == 0) {
             resetGame();
