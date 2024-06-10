@@ -18,7 +18,7 @@ public class TransitDialog extends JDialog {
         });
 
         // Завантаження та масштабування зображення
-        ImageIcon originalIcon = new ImageIcon("/Users/mark.kotkovskyi/IdeaProjects/Tetrissurprise/src/images/soldier.png"); // Вкажіть шлях до вашого зображення
+        ImageIcon originalIcon = new ImageIcon("src/images/soldier.png"); // Вкажіть шлях до вашого зображення
         Image originalImage = originalIcon.getImage();
         Image scaledImage = originalImage.getScaledInstance(400, 300, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
