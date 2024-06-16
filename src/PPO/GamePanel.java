@@ -43,10 +43,7 @@ public class GamePanel extends JPanel {
 
         // Завантаження зображень та звуку
         shootSound = new SoundPlayer("src/sounds/shoot.wav"); // Вкажіть правильний шлях до файлу зі звуком
-        missileImage = loadImage("src/images/missle.png");
-        enemyMissileImage = loadImage("src/images/enemy.png");
-        gunImage = loadImage("src/images/gun.png");
-        background = loadImage("src/images/warbackg.png");
+        loadDayImages();
         leftPanelImage = loadImage("src/images/leftpanel.jpg");
         rightPanelImage = loadImage("src/images/rightpanel.jpg");
 
@@ -61,6 +58,13 @@ public class GamePanel extends JPanel {
 
         timer = new Timer(10, e -> updateGame());
         timer.start();
+    }
+
+    private void loadDayImages() {
+        missileImage = loadImage("src/images/missle.png");
+        enemyMissileImage = loadImage("src/images/enemy.png");
+        gunImage = loadImage("src/images/gun.png");
+        background = loadImage("src/images/warbackg.png");
     }
 
     private void shootMissile(int targetX, int targetY) {
@@ -128,14 +132,17 @@ public class GamePanel extends JPanel {
         controlPanel.updateInfo();
         repaint();
 
-        if (random.nextInt(200) < 2 && ENEMY_MISSILES_LEFT > 0) {
+        int missilesLeft = ENEMY_MISSILES - CURRENT_SCORE;
+
+        if (random.nextInt(200) < 2 && missilesLeft > 0) {
             spawnEnemyMissile();
-            ENEMY_MISSILES_LEFT--;
         }
 
-        if(enemyMissiles.isEmpty() && ENEMY_MISSILES_LEFT == 0) {
+        if(missilesLeft <= 0) {
             if(LEVEL == 1) {
                 JDialog level2Dialog = new Level2Dialog(gameFrame);
+
+                MISSILE_SPEED *= 2;
             } else if(LEVEL == 2) {
                 JDialog level3Dialog = new Level3Dialog(gameFrame);
 
@@ -148,8 +155,12 @@ public class GamePanel extends JPanel {
                 SuccessDialog successDialog = new SuccessDialog(gameFrame);
             }
 
+            for(EnemyMissile enemyMissile : enemyMissiles) {
+                enemyMissile.setVisible(false);
+                enemyMissiles.remove(enemyMissile);
+            }
+
             LIVES = 3;
-            ENEMY_MISSILES_LEFT = ENEMY_MISSILES;
             CURRENT_SCORE = 0;
             LEVEL++;
             controlPanel.updateInfo();
@@ -171,13 +182,13 @@ public class GamePanel extends JPanel {
     }
 
     private void resetGame() {
+        loadDayImages();
         missiles.clear();
         enemyMissiles.clear();
         CURRENT_SCORE = 0;
         LIVES = 3;
         LEVEL = 1;
         MISSILE_SPEED = 2;
-        ENEMY_MISSILES_LEFT = ENEMY_MISSILES;
         controlPanel.updateInfo();
         timer.start();
     }

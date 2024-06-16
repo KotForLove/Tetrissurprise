@@ -17,7 +17,7 @@ public class Level3Dialog extends JDialog {
         });
 
         // Create the text area with the message
-        JTextArea text = new JTextArea("Congrats! You have accomplished level 2. Now you will be fighting in the night and some missiles can only be seen on radar.");
+        JTextArea text = new JTextArea("Congrats! You have accomplished level 2. Now you will be fighting in the night and some will be hardly visible.");
         text.setFont(new Font("Arial", Font.BOLD, 18));
         text.setOpaque(false);
         text.setEditable(false);
