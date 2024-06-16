@@ -1,5 +1,6 @@
 package Tetris;
 
+import Common.SoundPlayer;
 import PPO.PPOMainMenu;
 import PPO.TransitDialog;
 import Tetris.Tetris;
@@ -27,6 +28,10 @@ public class Board extends JPanel implements ActionListener {
     private Piece.Tetrominoes[] board;
     private Tetris parent;
     private int PIECES_COUNT = 0;
+    private SoundPlayer rotateSoundPlayer;
+    private SoundPlayer moveSoundPlayer;
+    private SoundPlayer dropSoundPlayer;
+    private SoundPlayer linefallSoundPlayer;
 
     public Board(Tetris parent) {
         this.parent = parent;
@@ -34,6 +39,10 @@ public class Board extends JPanel implements ActionListener {
         curPiece = new Piece();
         timer = new Timer(100, this);
         board = new Piece.Tetrominoes[BOARD_WIDTH * BOARD_HEIGHT];
+        rotateSoundPlayer = new SoundPlayer("src/sounds/rotate.wav");
+        moveSoundPlayer = new SoundPlayer("src/sounds/move.wav");
+        dropSoundPlayer = new SoundPlayer("src/sounds/softdrop.wav");
+        linefallSoundPlayer = new SoundPlayer("src/sounds/linefall.wav");
         addKeyListener(new TAdapter());
         clearBoard();
     }
@@ -116,7 +125,7 @@ public class Board extends JPanel implements ActionListener {
 
         PIECES_COUNT++;
 
-        if(PIECES_COUNT == 5) {
+        if(PIECES_COUNT == 15) {
             parent.setVisible(false);
             parent.dispose();
             new TransitDialog(parent);
@@ -239,22 +248,28 @@ public class Board extends JPanel implements ActionListener {
             switch (keycode) {
                 case KeyEvent.VK_LEFT:
                     tryMove(curPiece, curX - 1, curY);
+                    moveSoundPlayer.play();
                     break;
                 case KeyEvent.VK_RIGHT:
                     tryMove(curPiece, curX + 1, curY);
+                    moveSoundPlayer.play();
                     break;
                 case KeyEvent.VK_DOWN:
                     tryMove(curPiece.rotateRight(), curX, curY);
+                    rotateSoundPlayer.play();
                     break;
                 case KeyEvent.VK_UP:
                     tryMove(curPiece.rotateLeft(), curX, curY);
+                    rotateSoundPlayer.play();
                     break;
                 case KeyEvent.VK_SPACE:
                     dropDown();
+                    dropSoundPlayer.play();
                     break;
                 case 'd':
                 case 'D':
                     oneLineDown();
+                    linefallSoundPlayer.play();
                     break;
             }
         }

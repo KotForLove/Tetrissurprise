@@ -1,5 +1,7 @@
 package PPO;
 
+import Common.SoundPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +11,7 @@ import java.io.File;
 public class PPOMainMenu extends JFrame implements ActionListener {
     private JButton startButton;
     private JButton settingsButton;
+    private SoundPlayer vietnamPlayer;
 
     public PPOMainMenu() {
         // Налаштування основного вікна
@@ -57,6 +60,9 @@ public class PPOMainMenu extends JFrame implements ActionListener {
 
         // Відображення вікна
         setVisible(true);
+
+        vietnamPlayer = new SoundPlayer("src/sounds/vietnam1.wav");
+        vietnamPlayer.play();
     }
 
     private JButton createButton(String imagePath, int width, int height) {

@@ -1,8 +1,9 @@
 package PPO;
 
+import Common.SoundPlayer;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class TransitDialog extends JDialog {
     public TransitDialog(JFrame owner) {

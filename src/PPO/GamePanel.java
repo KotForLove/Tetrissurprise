@@ -1,5 +1,7 @@
 package PPO;
 
+import Common.SoundPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,7 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GamePanel extends JPanel {
     public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    public static final int HEIGHT = 800;
 
 
     private java.util.Queue<Missile> missiles;

@@ -1,5 +1,7 @@
 package Tetris;
 
+import Common.SoundPlayer;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -8,6 +10,8 @@ public class Tetris extends JFrame {
     private JPanel menuPanel;
     private JLabel scoreLabel;
     private int score = 0;
+    private SoundPlayer beatboxSoundPlayer;
+
 
     public Tetris() {
         setTitle("Tetris");
@@ -26,7 +30,11 @@ public class Tetris extends JFrame {
         JLabel imageLabel = new JLabel(imageIcon);
         menuPanel.add(imageLabel, BorderLayout.CENTER);
 
+        beatboxSoundPlayer = new SoundPlayer("src/sounds/tetris-beatbox.wav");
+
         add(menuPanel, BorderLayout.CENTER);
+
+        beatboxSoundPlayer.play();
 
         setVisible(true);
     }
