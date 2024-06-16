@@ -86,10 +86,8 @@ public class PPOMainMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
             // Перейти до гри
-            JFrame gameFrame = new JFrame("PPO Defense Game");
-            GamePanel gamePanel = new GamePanel();
-            gameFrame.add(gamePanel);
-            gameFrame.setSize(800, 800);
+            JFrame gameFrame = new GameFrame();
+            gameFrame.setSize(1000, 800);
             gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             gameFrame.setLocationRelativeTo(null);
             gameFrame.setVisible(true);

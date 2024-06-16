@@ -6,24 +6,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import static Common.ImageLoader.loadImage;
+import static PPO.Livescore.LIVES;
+import static PPO.Livescore.SCORE;
 
 public class GamePanel extends JPanel {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 800;
 
-
+    private ControlPanel controlPanel;
     private java.util.Queue<Missile> missiles;
     private java.util.Queue<EnemyMissile> enemyMissiles;
     private Timer timer;
     private int gunX, gunY;
     private Random random;
-    private boolean nextMissileFromLeft;
-    private int score;
-    private int lives;
     private SoundPlayer shootSound;
     private static int missileSpeed = 2;
     private ImageIcon missileImage;
@@ -33,13 +33,11 @@ public class GamePanel extends JPanel {
     private ImageIcon leftPanelImage;
     private ImageIcon rightPanelImage;
 
-    public GamePanel() {
+    public GamePanel(ControlPanel controlPanel) {
+        this.controlPanel = controlPanel;
         missiles = new ConcurrentLinkedQueue<>();
         enemyMissiles = new ConcurrentLinkedQueue<>();
         random = new Random();
-        nextMissileFromLeft = true;
-        score = 0;
-        lives = 3;
 
         // Завантаження зображень та звуку
         shootSound = new SoundPlayer("src/sounds/shoot.wav"); // Вкажіть правильний шлях до файлу зі звуком
@@ -61,15 +59,6 @@ public class GamePanel extends JPanel {
 
         timer = new Timer(10, e -> updateGame());
         timer.start();
-    }
-
-    private ImageIcon loadImage(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            System.err.println("Зображення не знайдено: " + file.getAbsolutePath());
-            return null;
-        }
-        return new ImageIcon(file.getAbsolutePath());
     }
 
     private void shootMissile(int targetX, int targetY) {
@@ -114,7 +103,8 @@ public class GamePanel extends JPanel {
                 EnemyMissile enemyMissile = enemyMissileIterator.next();
                 if (missile.getBounds().intersects(enemyMissile.getBounds())) {
                     enemyMissiles.remove(enemyMissile);
-                    score++;
+                    SCORE++;
+                    controlPanel.updateInfo();
                 }
             }
         }
@@ -125,8 +115,9 @@ public class GamePanel extends JPanel {
             if (!enemyMissile.isVisible()) {
                 enemyMissileIterator.remove();
                 // Віднімання життя при досягненні цілі
-                lives--;
-                if (lives <= 0) {
+                LIVES--;
+                controlPanel.updateInfo();
+                if (LIVES <= 0) {
                     gameOver();
                 }
             }
@@ -141,7 +132,7 @@ public class GamePanel extends JPanel {
 
     private void gameOver() {
         timer.stop();
-        int option = JOptionPane.showOptionDialog(this, "Game Over. Your score: " + score,
+        int option = JOptionPane.showOptionDialog(this, "Game Over. Your score: " + SCORE,
                 "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, new String[]{"Restart"}, "Restart");
 
@@ -156,8 +147,9 @@ public class GamePanel extends JPanel {
     private void resetGame() {
         missiles.clear();
         enemyMissiles.clear();
-        score = 0;
-        lives = 3;
+        SCORE = 0;
+        LIVES = 3;
+        controlPanel.updateInfo();
         timer.start();
     }
 
@@ -217,11 +209,6 @@ public class GamePanel extends JPanel {
             g.drawImage(leftPanelImage.getImage(), 0, getHeight() - 100, scannerCenterX, panelHeight, null); // Розтягнуто на всю ліву частину
             g.drawImage(rightPanelImage.getImage(), scannerCenterX + 100, getHeight() - 100, getWidth() - scannerCenterX - 100, panelHeight, null); // Розтягнуто на всю праву частину
         }
-
-        // Малювання рахунку та життів
-        g.setColor(Color.WHITE);
-        g.drawString("Score: " + score, 10, getHeight() - 80);
-        g.drawString("Lives: " + lives, 10, getHeight() - 60);
 
         // Малювання ворожих ракет на сканері
         for (EnemyMissile enemyMissile : enemyMissiles) {

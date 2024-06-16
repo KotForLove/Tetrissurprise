@@ -125,7 +125,7 @@ public class Board extends JPanel implements ActionListener {
 
         PIECES_COUNT++;
 
-        if(PIECES_COUNT == 15) {
+        if(PIECES_COUNT == 12) {
             parent.setVisible(false);
             parent.dispose();
             new TransitDialog(parent);
