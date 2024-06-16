@@ -62,7 +62,7 @@ public class PPOMainMenu extends JFrame implements ActionListener {
         setVisible(true);
 
         vietnamPlayer = new SoundPlayer("src/sounds/vietnam1.wav");
-        vietnamPlayer.play();
+        vietnamPlayer.playLoop();
     }
 
     private JButton createButton(String imagePath, int width, int height) {
@@ -86,7 +86,7 @@ public class PPOMainMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton) {
             // Перейти до гри
-            JFrame gameFrame = new GameFrame();
+            JFrame gameFrame = new GameFrame(vietnamPlayer);
             gameFrame.setSize(1000, 800);
             gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             gameFrame.setLocationRelativeTo(null);

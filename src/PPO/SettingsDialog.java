@@ -5,13 +5,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static PPO.Livescore.MISSILE_SPEED;
+
 public class SettingsDialog extends JDialog {
     private JSlider missileSpeedSlider;
 
     public SettingsDialog(Frame owner) {
         super(owner, "Settings", true);
 
-        missileSpeedSlider = new JSlider(JSlider.HORIZONTAL, 1, 20, GamePanel.getMissileSpeed());
+        missileSpeedSlider = new JSlider(JSlider.HORIZONTAL, 1, 20, MISSILE_SPEED);
         missileSpeedSlider.setMajorTickSpacing(5);
         missileSpeedSlider.setMinorTickSpacing(1);
         missileSpeedSlider.setPaintTicks(true);
@@ -25,7 +27,7 @@ public class SettingsDialog extends JDialog {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GamePanel.setMissileSpeed(missileSpeedSlider.getValue());
+                MISSILE_SPEED = missileSpeedSlider.getValue();
                 dispose();
             }
         });

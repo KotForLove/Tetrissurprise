@@ -5,15 +5,16 @@ import Common.SoundPlayer;
 import javax.swing.*;
 import java.awt.*;
 
-public class TransitDialog extends JDialog {
-    public TransitDialog(JFrame owner) {
-        super(owner, "ALERT!!!", true);
+public class SuccessDialog extends JDialog {
+    public SuccessDialog(JFrame owner) {
+        super(owner, "You have won!", true);
 
-        JButton okButton = new JButton("Become a PPO operator");
+        JButton okButton = new JButton("Thanks!");
 
         // Додавання слухача подій для кнопки
         okButton.addActionListener(e -> {
             // Код для переходу в гру
+            owner.dispose();
             dispose(); // Закриває діалогове вікно
         });
 
@@ -30,7 +31,7 @@ public class TransitDialog extends JDialog {
         add(okButton, BorderLayout.SOUTH);
 
         // Програвання звуку
-        new SoundPlayer("src/sounds/soldier_shout.wav").play();
+        new SoundPlayer("src/sounds/thanks.wav").play();
 
         setSize(400, 400);
         setLocationRelativeTo(owner);

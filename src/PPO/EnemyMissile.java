@@ -3,6 +3,8 @@ package PPO;
 import javax.swing.*;
 import java.awt.*;
 
+import static PPO.Livescore.MISSILE_SPEED;
+
 public class EnemyMissile {
     private int x, y;
     private int targetX, targetY;
@@ -21,7 +23,7 @@ public class EnemyMissile {
         int deltaX = targetX - x;
         int deltaY = targetY - y;
         double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        double steps = distance / GamePanel.getMissileSpeed();
+        double steps = distance / MISSILE_SPEED;
         this.dx = (int) (deltaX / steps);
         this.dy = (int) (deltaY / steps);
     }

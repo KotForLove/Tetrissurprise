@@ -2,9 +2,8 @@ package PPO;
 
 import javax.swing.*;
 import java.awt.*;
-import static PPO.Livescore.LIVES;
-import static PPO.Livescore.SCORE;
-import static PPO.Livescore.LEVEL;
+
+import static PPO.Livescore.*;
 
 public class ControlPanel extends JPanel {
     private JLabel scoreLabel;
@@ -14,7 +13,7 @@ public class ControlPanel extends JPanel {
     public ControlPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        scoreLabel = new JLabel("Score: " + SCORE);
+        scoreLabel = new JLabel("Score: " + CURRENT_SCORE + "/" + ENEMY_MISSILES);
         livesLabel = new JLabel("Lives: " + LIVES);
         levelLabel = new JLabel("Level: " + LEVEL);
 
@@ -46,7 +45,7 @@ public class ControlPanel extends JPanel {
     }
 
     public void updateScore() {
-        scoreLabel.setText("Score: " + SCORE);
+        scoreLabel.setText("Score: " + CURRENT_SCORE + "/" + ENEMY_MISSILES);
     }
 
     public void updateLives() {

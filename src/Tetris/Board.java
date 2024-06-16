@@ -127,6 +127,7 @@ public class Board extends JPanel implements ActionListener {
 
         if(PIECES_COUNT == 12) {
             parent.setVisible(false);
+            parent.stopMusic();
             parent.dispose();
             new TransitDialog(parent);
             PPOMainMenu mainMenu = new PPOMainMenu();

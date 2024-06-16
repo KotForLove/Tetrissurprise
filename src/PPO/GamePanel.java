@@ -11,8 +11,7 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static Common.ImageLoader.loadImage;
-import static PPO.Livescore.LIVES;
-import static PPO.Livescore.SCORE;
+import static PPO.Livescore.*;
 
 public class GamePanel extends JPanel {
     public static final int WIDTH = 800;
@@ -25,16 +24,19 @@ public class GamePanel extends JPanel {
     private int gunX, gunY;
     private Random random;
     private SoundPlayer shootSound;
-    private static int missileSpeed = 2;
     private ImageIcon missileImage;
     private ImageIcon enemyMissileImage;
     private ImageIcon gunImage;
     private ImageIcon background;
     private ImageIcon leftPanelImage;
     private ImageIcon rightPanelImage;
+    private GameFrame gameFrame;
+    private SoundPlayer vietnamPlayer;
 
-    public GamePanel(ControlPanel controlPanel) {
+    public GamePanel(GameFrame gameFrame, ControlPanel controlPanel, SoundPlayer vietnamPlayer) {
+        this.gameFrame = gameFrame;
         this.controlPanel = controlPanel;
+        this.vietnamPlayer = vietnamPlayer;
         missiles = new ConcurrentLinkedQueue<>();
         enemyMissiles = new ConcurrentLinkedQueue<>();
         random = new Random();
@@ -103,7 +105,7 @@ public class GamePanel extends JPanel {
                 EnemyMissile enemyMissile = enemyMissileIterator.next();
                 if (missile.getBounds().intersects(enemyMissile.getBounds())) {
                     enemyMissiles.remove(enemyMissile);
-                    SCORE++;
+                    CURRENT_SCORE++;
                     controlPanel.updateInfo();
                 }
             }
@@ -123,16 +125,40 @@ public class GamePanel extends JPanel {
             }
         }
 
+        controlPanel.updateInfo();
         repaint();
 
-        if (random.nextInt(200) < 2) {
+        if (random.nextInt(200) < 2 && ENEMY_MISSILES_LEFT > 0) {
             spawnEnemyMissile();
+            ENEMY_MISSILES_LEFT--;
+        }
+
+        if(enemyMissiles.isEmpty() && ENEMY_MISSILES_LEFT == 0) {
+            if(LEVEL == 1) {
+                JDialog level2Dialog = new Level2Dialog(gameFrame);
+            } else if(LEVEL == 2) {
+                JDialog level3Dialog = new Level3Dialog(gameFrame);
+
+                gunImage = loadImage("src/images/gun_night.png");
+                background = loadImage("src/images/warbackg_night.png");
+                missileImage = loadImage("src/images/missile_night.png");
+                enemyMissileImage = loadImage("src/images/enemy_night.png");
+            } else if(LEVEL == 3) {
+                vietnamPlayer.stop();
+                SuccessDialog successDialog = new SuccessDialog(gameFrame);
+            }
+
+            LIVES = 3;
+            ENEMY_MISSILES_LEFT = ENEMY_MISSILES;
+            CURRENT_SCORE = 0;
+            LEVEL++;
+            controlPanel.updateInfo();
         }
     }
 
     private void gameOver() {
         timer.stop();
-        int option = JOptionPane.showOptionDialog(this, "Game Over. Your score: " + SCORE,
+        int option = JOptionPane.showOptionDialog(this, "Game Over. Your score: " + CURRENT_SCORE,
                 "Game Over", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                 null, new String[]{"Restart"}, "Restart");
 
@@ -147,22 +173,17 @@ public class GamePanel extends JPanel {
     private void resetGame() {
         missiles.clear();
         enemyMissiles.clear();
-        SCORE = 0;
+        CURRENT_SCORE = 0;
         LIVES = 3;
+        LEVEL = 1;
+        MISSILE_SPEED = 2;
+        ENEMY_MISSILES_LEFT = ENEMY_MISSILES;
         controlPanel.updateInfo();
         timer.start();
     }
 
     private void goToMainMenu() {
         // Імплементуйте ваш метод для повернення на головне меню
-    }
-
-    public static int getMissileSpeed() {
-        return missileSpeed;
-    }
-
-    public static void setMissileSpeed(int speed) {
-        missileSpeed = speed;
     }
 
     @Override

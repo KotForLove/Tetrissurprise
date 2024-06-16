@@ -27,4 +27,15 @@ public class SoundPlayer {
             clip.start();
         }
     }
+
+    public void playLoop() {
+        play();
+        clip.loop(Clip.LOOP_CONTINUOUSLY);
+    }
+
+    public void stop() {
+        if(clip != null) {
+            clip.stop();
+        }
+    }
 }

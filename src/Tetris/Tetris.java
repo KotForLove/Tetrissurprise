@@ -34,9 +34,13 @@ public class Tetris extends JFrame {
 
         add(menuPanel, BorderLayout.CENTER);
 
-        beatboxSoundPlayer.play();
+        beatboxSoundPlayer.playLoop();
 
         setVisible(true);
+    }
+
+    public void stopMusic() {
+        beatboxSoundPlayer.stop();
     }
 
     public void startGame() {
